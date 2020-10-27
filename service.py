@@ -1,8 +1,9 @@
-import models
+from models import ToDoModel
+
 
 class ToDoService:
-    def __int__(self):
-        self.model = models.ToDoModel()
+    def __init__(self):
+        self.model = ToDoModel()
 
     def create(self, params):
-        return self.model.create(params["text"], params["Description"])
+        return self.model.create(params)

@@ -1,5 +1,6 @@
 import sqlite3
 
+
 class Schema:
     def __init__(self):
         self.conn = sqlite3.connect('todo.db')
@@ -31,19 +32,21 @@ class Schema:
         """
         self.conn.execute(query)
 
-class ToDoModel:
-    TABLENAME = "TODO"
 
-    def __int__(self):
+class ToDoModel:
+    TABLENAME = "Todo"
+
+    def __init__(self):
         self.conn = sqlite3.connect('todo.db')
 
-    def create(self, text, description, TABLENAME):
+    def create(self, params):
         query = f'insert into {self.TABLENAME} ' \
                 f'(Title, Description) ' \
-                f'values ("{text}","{description}")'
+                f'values ("{params.get("Title")}","{params.get("Description")}")'
 
         result = self.conn.execute(query)
         return result
+
 
 class User:
     TABLENAME = "User"
