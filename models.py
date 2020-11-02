@@ -43,9 +43,16 @@ class ToDoModel:
         query = f"SELECT id, Title, Description, DueDate, _is_done " \
                 f"from {self.TABLENAME} WHERE _is_deleted != {1} AND id={_id}"
         print(query)
-        result = self.conn.execute(query).fetchall()
+        result = self.conn.execute(query).fetchall() #fetchall returns list of tuples
         print(result)
-        return result
+        db_result = dict()
+        for elt in result:
+            db_result["id"] = elt[0]
+            db_result["Title"] = elt[1]
+            db_result["Description"] = elt[2]
+            db_result["DueDate"] = elt[3]
+            db_result["_is_done"] = elt[4]
+        return db_result
 
     def create(self, params):
         query = f'insert into {self.TABLENAME} ' \
