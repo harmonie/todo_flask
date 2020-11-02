@@ -37,21 +37,38 @@ class ToDoModel:
     TABLENAME = "Todo"
 
     def __init__(self):
-        self.conn = sqlite3.connect('todo.db')
+        self.conn = sqlite3.connect('todo.db', isolation_level=None)
 
     def get_by_id(self, _id):
         query = f"SELECT id, Title, Description, DueDate, _is_done " \
                 f"from {self.TABLENAME} WHERE _is_deleted != {1} AND id={_id}"
-        print(query)
+
         result = self.conn.execute(query).fetchall() #fetchall returns list of tuples
-        print(result)
+
+        if len(result) == 0:
+            return None
+        else:
+            return self.map_db_result(result[0])
+
+    def get_all(self):
+        query = f"SELECT id, Title, Description, DueDate, _is_done " \
+                f"from {self.TABLENAME} WHERE _is_deleted != {1}"
+
+        result = self.conn.execute(query).fetchall()  # fetchall returns list of tuples
+
+        todo_list = []
+        for todo in result:
+            todo_list.append(self.map_db_result(todo))
+        return todo_list
+
+    def map_db_result(self, elt):
         db_result = dict()
-        for elt in result:
-            db_result["id"] = elt[0]
-            db_result["Title"] = elt[1]
-            db_result["Description"] = elt[2]
-            db_result["DueDate"] = elt[3]
-            db_result["_is_done"] = elt[4]
+        db_result["id"] = elt[0]
+        db_result["Title"] = elt[1]
+        db_result["Description"] = elt[2]
+        db_result["DueDate"] = elt[3]
+        db_result["_is_done"] = elt[4]
+        print(db_result)
         return db_result
 
     def create(self, params):
